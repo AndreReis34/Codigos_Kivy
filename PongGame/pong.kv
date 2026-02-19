@@ -28,6 +28,18 @@
             pos: self.center_x - 5, 0
             size: 10, self.height
 
+    Button:
+        id: botao_continue
+        text: "Continuar"
+        opacity: 0          # Invisível
+        disabled: True      # Não clicável
+        size_hint_y: None
+        height: 50
+        width: 200
+        top: root.top - 100
+        center_x: root.width * 2 / 4
+        on_release: root.iniciar_jogo()
+
     Label:
         font_size: 70
         center_x: root.width / 4

@@ -33,6 +33,7 @@ class PongGame(Widget):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
+    my_clock = ObjectProperty(None)
 
     def serve_ball(self, vel=(4, 0)):
         self.ball.center = self.center
@@ -57,18 +58,35 @@ class PongGame(Widget):
             self.player1.score += 1
             self.serve_ball(vel=(-4, 0))
 
+        if self.player1.score >= 5 or self.player2.score >= 5:
+            self.player1.score = 0
+            self.player2.score = 0
+            self.mostrar_botao()
+
+
     def on_touch_move(self, touch):
         if touch.x < self.width / 3:
             self.player1.center_y = touch.y
         if touch.x > self.width - self.width / 3:
             self.player2.center_y = touch.y
 
+    def mostrar_botao(self):
+        self.my_clock.cancel()
+        self.ids.botao_continue.opacity = 1
+        self.ids.botao_continue.disabled = False
+
+
+    def iniciar_jogo(self):
+        self.serve_ball()
+        self.my_clock = Clock.schedule_interval(self.update, 1.0 / 60.0)
+        self.ids.botao_continue.opacity = 0
+        self.ids.botao_continue.disabled = True
+
 
 class PongApp(App):
     def build(self):
         game = PongGame()
-        game.serve_ball()
-        Clock.schedule_interval(game.update, 1.0 / 60.0)
+        game.iniciar_jogo()
         return game
 
 
